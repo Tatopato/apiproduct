@@ -24,8 +24,8 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 1. เปลี่ยนสีพื้นหลังให้เป็นสีเทาอ่อนมากๆ เพื่อให้การ์ดสีขาวดูโดดเด่น (Minimal)
-      backgroundColor: const Color(0xFFF3F4F6),
+      // 1. พื้นหลังครีมอุ่นๆ แบบธรรมชาติ แทนสีเทาเย็น
+      backgroundColor: const Color(0xFFFAF6EF),
       
       appBar: AppBar(
         // 2. ปรับ AppBar ให้ดูคลีน ไม่มีเงา
@@ -34,7 +34,7 @@ class _ProductScreenState extends State<ProductScreen> {
         title: const Text(
           'Products',
           style: TextStyle(
-            color: Color(0xFF2D3748), // สีเทาเข้มอมน้ำเงิน ดูพรีเมียมกว่าสีดำสนิท
+            color: Color(0xFF4A453D), // น้ำตาลเข้มอบอุ่น แทนเทาอมน้ำเงิน
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
           ),
@@ -47,7 +47,7 @@ class _ProductScreenState extends State<ProductScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // ปรับสีตัวโหลดให้เข้ากับธีม
-            return const Center(child: CircularProgressIndicator(color: Color(0xFF8B5CF6))); 
+            return const Center(child: CircularProgressIndicator(color: Color(0xFF8A9A8B))); 
           }
 
           if (snapshot.hasError) {
@@ -108,10 +108,10 @@ class ProductCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade200, width: 1.5),
+            border: Border.all(color: const Color(0xFFE8E1D4), width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: const Color(0xFF8A9A8B).withOpacity(0.10),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
@@ -125,13 +125,13 @@ class ProductCard extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
                   child: Container(
                     width: double.infinity,
-                    color: Colors.white,
+                    color: const Color(0xFFF1ECE1),
                     padding: const EdgeInsets.all(12), 
                     child: Image.network(
                       product.thumbnail,
                       fit: BoxFit.contain, 
                       errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.image_not_supported, color: Colors.black26);
+                        return const Icon(Icons.image_not_supported, color: Color(0xFFA39C8C));
                       },
                     ),
                   ),
@@ -149,17 +149,17 @@ class ProductCard extends StatelessWidget {
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
-                        color: Color(0xFF4A5568),
+                        color: Color(0xFF4A453D),
                       ),
                     ),
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        const Icon(Icons.star_rounded, color: Color(0xFFFBBF24), size: 16),
+                        const Icon(Icons.star_rounded, color: Color(0xFFD98C6B), size: 16),
                         const SizedBox(width: 4),
                         Text(
                           product.rating.toStringAsFixed(1),
-                          style: const TextStyle(fontSize: 12, color: Color(0xFF718096)),
+                          style: const TextStyle(fontSize: 12, color: Color(0xFFA39C8C)),
                         ),
                       ],
                     ),
@@ -169,7 +169,7 @@ class ProductCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF10B981), 
+                        color: Color(0xFF5F6F60), 
                       ),
                     ),
                   ],

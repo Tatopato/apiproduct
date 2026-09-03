@@ -13,8 +13,19 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFAF6EF),
       appBar: AppBar(
-        title: const Text('Product Detail'),
+        backgroundColor: const Color(0xFFFAF6EF),
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Color(0xFF4A453D)),
+        title: const Text(
+          'Product Detail',
+          style: TextStyle(
+            color: Color(0xFF4A453D),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
 
       body: SingleChildScrollView(
@@ -26,7 +37,7 @@ class ProductDetailScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 320,
-              color: Colors.grey.shade100,
+              color: const Color(0xFFF1ECE1),
               child: Image.network(
                 product.thumbnail,
                 fit: BoxFit.contain,
@@ -39,6 +50,7 @@ class ProductDetailScreen extends StatelessWidget {
                     child: Icon(
                       Icons.image_not_supported,
                       size: 80,
+                      color: Color(0xFFA39C8C),
                     ),
                   );
                 },
@@ -54,10 +66,11 @@ class ProductDetailScreen extends StatelessWidget {
                   // Category
                   Text(
                     product.category.toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.blue.shade700,
+                    style: const TextStyle(
+                      color: Color(0xFFD98C6B),
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
+                      letterSpacing: 0.5,
                     ),
                   ),
 
@@ -69,6 +82,7 @@ class ProductDetailScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF4A453D),
                     ),
                   ),
 
@@ -78,8 +92,8 @@ class ProductDetailScreen extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+                        Icons.star_rounded,
+                        color: Color(0xFFD98C6B),
                       ),
                       const SizedBox(width: 5),
                       Text(
@@ -87,6 +101,7 @@ class ProductDetailScreen extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          color: Color(0xFF4A453D),
                         ),
                       ),
                     ],
@@ -100,13 +115,13 @@ class ProductDetailScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: Color(0xFF5F6F60),
                     ),
                   ),
 
                   const SizedBox(height: 20),
 
-                  const Divider(),
+                  Divider(color: const Color(0xFFE8E1D4)),
 
                   const SizedBox(height: 10),
 
@@ -142,6 +157,7 @@ class ProductDetailScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF4A453D),
                     ),
                   ),
 
@@ -149,10 +165,10 @@ class ProductDetailScreen extends StatelessWidget {
 
                   Text(
                     product.description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       height: 1.6,
-                      color: Colors.grey.shade700,
+                      color: Color(0xFF8A8478),
                     ),
                   ),
 
@@ -166,14 +182,24 @@ class ProductDetailScreen extends StatelessWidget {
 
       // Add to Cart Button
       bottomNavigationBar: SafeArea(
-        child: Padding(
+        child: Container(
+          color: const Color(0xFFFAF6EF),
           padding: const EdgeInsets.all(16),
           child: SizedBox(
             height: 55,
             child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF8A9A8B),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                elevation: 0,
+              ),
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: const Color(0xFF5F6F60),
                     content: Text(
                       '${product.title} added to cart',
                     ),
@@ -206,7 +232,7 @@ class ProductDetailScreen extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: Colors.blue,
+          color: const Color(0xFF8A9A8B),
         ),
 
         const SizedBox(width: 12),
@@ -216,6 +242,7 @@ class ProductDetailScreen extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            color: Color(0xFF4A453D),
           ),
         ),
 
@@ -224,9 +251,9 @@ class ProductDetailScreen extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
-              color: Colors.grey.shade700,
+              color: Color(0xFF8A8478),
             ),
           ),
         ),
