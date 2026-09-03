@@ -13,55 +13,62 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   final ProductService productService = ProductService();
-
   late Future<List<Product>> products;
 
   @override
   void initState() {
     super.initState();
-
     products = productService.getProducts();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Products'), centerTitle: true),
+      // 1. เปลี่ยนสีพื้นหลังให้เป็นสีเทาอ่อนมากๆ เพื่อให้การ์ดสีขาวดูโดดเด่น (Minimal)
+      backgroundColor: const Color(0xFFF3F4F6),
+      
+      appBar: AppBar(
+        // 2. ปรับ AppBar ให้ดูคลีน ไม่มีเงา
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Products',
+          style: TextStyle(
+            color: Color(0xFF2D3748), // สีเทาเข้มอมน้ำเงิน ดูพรีเมียมกว่าสีดำสนิท
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+        centerTitle: true,
+      ),
 
       body: FutureBuilder<List<Product>>(
         future: products,
-
         builder: (context, snapshot) {
-          // Loading
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            // ปรับสีตัวโหลดให้เข้ากับธีม
+            return const Center(child: CircularProgressIndicator(color: Color(0xFF8B5CF6))); 
           }
 
-          // Error
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          // No data
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No products found'));
           }
 
           final productList = snapshot.data!;
 
-          // Success
           return GridView.builder(
-            padding: const EdgeInsets.all(16),
-
+            padding: const EdgeInsets.all(20), // เพิ่มพื้นที่ขอบให้ดูโปร่งขึ้น
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
+              crossAxisSpacing: 16, // ขยายช่องว่างระหว่างการ์ด
+              mainAxisSpacing: 16,
               childAspectRatio: 0.65,
             ),
-
             itemCount: productList.length,
-
             itemBuilder: (context, index) {
               final product = productList[index];
 
@@ -71,8 +78,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ProductDetailScreen(product: product),
+                      builder: (context) => ProductDetailScreen(product: product),
                     ),
                   );
                 },
@@ -93,76 +99,84 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      clipBehavior: Clip.antiAlias,
-
-      child: InkWell(
+    // นำ MouseRegion มาครอบไว้ชั้นนอกสุด
+    return MouseRegion(
+      cursor: SystemMouseCursors.click, // บังคับเปลี่ยนเคอร์เซอร์เมาส์เป็นรูปมือ
+      child: GestureDetector(
         onTap: onTap,
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                color: Colors.grey.shade100,
-
-                child: Image.network(
-                  product.thumbnail,
-                  fit: BoxFit.cover,
-
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.image_not_supported, size: 50);
-                  },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade200, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+                  child: Container(
+                    width: double.infinity,
+                    color: Colors.white,
+                    padding: const EdgeInsets.all(12), 
+                    child: Image.network(
+                      product.thumbnail,
+                      fit: BoxFit.contain, 
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.image_not_supported, color: Colors.black26);
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(10),
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                        color: Color(0xFF4A5568),
+                      ),
                     ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 17),
-
-                      const SizedBox(width: 4),
-
-                      Text(product.rating.toStringAsFixed(1)),
-                    ],
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  Text(
-                    '\$${product.price.toStringAsFixed(2)}',
-
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Icon(Icons.star_rounded, color: Color(0xFFFBBF24), size: 16),
+                        const SizedBox(width: 4),
+                        Text(
+                          product.rating.toStringAsFixed(1),
+                          style: const TextStyle(fontSize: 12, color: Color(0xFF718096)),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      '\$${product.price.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF10B981), 
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

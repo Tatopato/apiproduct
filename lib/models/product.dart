@@ -4,7 +4,6 @@ class Product {
   final String description;
   final double price;
   final String thumbnail;
-
   final double rating;
   final int stock;
   final String category;
@@ -25,14 +24,21 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'] ?? 0,
-      title: json['title'] ?? '',
+      title: json['title'] ?? 'No Title',
       description: json['description'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      thumbnail: json['thumbnail'] ?? '',
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      stock: json['stock'] ?? 0,
+      
+      // ดึงรูปภาพจาก key ชื่อ 'image'
+      thumbnail: json['image'] ?? '', 
+      
+      // เจาะเข้าไปเอาคะแนนเรตติ้งจาก Object
+      rating: (json['rating']?['rate'] as num?)?.toDouble() ?? 0.0,
+      
+      // API นี้ไม่มีสต็อก ใช้จำนวนคนรีวิวแทนชั่วคราว
+      stock: json['rating']?['count'] ?? 0, 
+      
       category: json['category'] ?? '',
-      brand: json['brand'] ?? 'No Brand',
+      brand: 'No Brand', 
     );
   }
 }
