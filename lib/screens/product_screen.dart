@@ -123,16 +123,19 @@ class ProductCard extends StatelessWidget {
               Expanded(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
-                  child: Container(
-                    width: double.infinity,
-                    color: const Color(0xFFF1ECE1),
-                    padding: const EdgeInsets.all(12), 
-                    child: Image.network(
-                      product.thumbnail,
-                      fit: BoxFit.contain, 
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.image_not_supported, color: Color(0xFFA39C8C));
-                      },
+                  child: Hero(
+                    tag: 'product-image-${product.id}',
+                    child: Container(
+                      width: double.infinity,
+                      color: const Color(0xFFF1ECE1),
+                      padding: const EdgeInsets.all(12), 
+                      child: Image.network(
+                        product.thumbnail,
+                        fit: BoxFit.contain, 
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.image_not_supported, color: Color(0xFFA39C8C));
+                        },
+                      ),
                     ),
                   ),
                 ),

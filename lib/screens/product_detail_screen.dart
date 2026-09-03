@@ -34,26 +34,42 @@ class ProductDetailScreen extends StatelessWidget {
           children: [
 
             // Product Image
-            Container(
-              width: double.infinity,
-              height: 320,
-              color: const Color(0xFFF1ECE1),
-              child: Image.network(
-                product.thumbnail,
-                fit: BoxFit.contain,
-                errorBuilder: (
-                  context,
-                  error,
-                  stackTrace,
-                ) {
-                  return const Center(
-                    child: Icon(
-                      Icons.image_not_supported,
-                      size: 80,
-                      color: Color(0xFFA39C8C),
+            Hero(
+              tag: 'product-image-${product.id}',
+              child: Container(
+                width: double.infinity,
+                height: 320,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1ECE1),
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(28),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF8A9A8B).withOpacity(0.15),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
                     ),
-                  );
-                },
+                  ],
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Image.network(
+                  product.thumbnail,
+                  fit: BoxFit.contain,
+                  errorBuilder: (
+                    context,
+                    error,
+                    stackTrace,
+                  ) {
+                    return const Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        size: 80,
+                        color: Color(0xFFA39C8C),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
 
@@ -64,13 +80,23 @@ class ProductDetailScreen extends StatelessWidget {
                 children: [
 
                   // Category
-                  Text(
-                    product.category.toUpperCase(),
-                    style: const TextStyle(
-                      color: Color(0xFFD98C6B),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      letterSpacing: 0.5,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD98C6B).withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      product.category.toUpperCase(),
+                      style: const TextStyle(
+                        color: Color(0xFFD98C6B),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        letterSpacing: 0.5,
+                      ),
                     ),
                   ),
 
@@ -89,22 +115,35 @@ class ProductDetailScreen extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   // Rating
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        color: Color(0xFFD98C6B),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        product.rating.toStringAsFixed(1),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF4A453D),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: const Color(0xFFE8E1D4)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.star_rounded,
+                          color: Color(0xFFD98C6B),
+                          size: 18,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 5),
+                        Text(
+                          product.rating.toStringAsFixed(1),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF4A453D),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 16),
@@ -121,33 +160,80 @@ class ProductDetailScreen extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  Divider(color: const Color(0xFFE8E1D4)),
+                  // Info card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFFE8E1D4)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Brand
+                        _buildInfoRow(
+                          icon: Icons.business,
+                          title: 'Brand',
+                          value: product.brand,
+                        ),
 
-                  const SizedBox(height: 10),
+                        const SizedBox(height: 14),
 
-                  // Brand
-                  _buildInfoRow(
-                    icon: Icons.business,
-                    title: 'Brand',
-                    value: product.brand,
-                  ),
+                        // Category
+                        _buildInfoRow(
+                          icon: Icons.category,
+                          title: 'Category',
+                          value: product.category,
+                        ),
 
-                  const SizedBox(height: 12),
+                        const SizedBox(height: 14),
 
-                  // Category
-                  _buildInfoRow(
-                    icon: Icons.category,
-                    title: 'Category',
-                    value: product.category,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // Stock
-                  _buildInfoRow(
-                    icon: Icons.inventory_2,
-                    title: 'Stock',
-                    value: '${product.stock} items',
+                        // Stock
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.inventory_2,
+                              color: Color(0xFF8A9A8B),
+                            ),
+                            const SizedBox(width: 12),
+                            const Text(
+                              'Stock:',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF4A453D),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: (product.stock > 10
+                                        ? const Color(0xFF8A9A8B)
+                                        : const Color(0xFFD98C6B))
+                                    .withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                '${product.stock} items',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: product.stock > 10
+                                      ? const Color(0xFF5F6F60)
+                                      : const Color(0xFFD98C6B),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 24),
@@ -183,7 +269,16 @@ class ProductDetailScreen extends StatelessWidget {
       // Add to Cart Button
       bottomNavigationBar: SafeArea(
         child: Container(
-          color: const Color(0xFFFAF6EF),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFAF6EF),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF8A9A8B).withOpacity(0.15),
+                blurRadius: 16,
+                offset: const Offset(0, -4),
+              ),
+            ],
+          ),
           padding: const EdgeInsets.all(16),
           child: SizedBox(
             height: 55,
